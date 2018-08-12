@@ -12,32 +12,37 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { 
+        this.state = {
             videos: [],
-            selectedVideo: null 
+            selectedVideo: null
         };
 
+        this.videoSearch('ufo')
+    }
+
+    videoSearch(term) {
         //searching on yt
         //parameters & callback function
-        YTSearch({key: API_KEY, term: 'ufo'}, (videos) => {
+        YTSearch({ key: API_KEY, term: term }, (videos) => {
             //this.setState({ videos }); is alternative syntax here
             this.setState({
-                 videos : videos,
-                 selectedVideo : videos[0]
-                });  
+                videos: videos,
+                selectedVideo: videos[0]
+            });
         });
     }
+
     render() {
         return (
-        <div>
-            <SearchBar/>
-            <VideoDetail video={this.state.selectedVideo}/>
-            <VideoList 
-                onVideoSelect={selectedVideo => this.setState({selectedVideo})}
-                videos={this.state.videos}/>
-        </div>);
+            <div>
+                <SearchBar onSearchTermChange={term => this.videoSearch(term)} />
+                <VideoDetail video={this.state.selectedVideo} />
+                <VideoList
+                    onVideoSelect={selectedVideo => this.setState({ selectedVideo })}
+                    videos={this.state.videos} />
+            </div>);
     }
 }
 
 //Take this component's generated HTML and put it in the DOM
-ReactDOM.render(<App/>, document.querySelector('.container'));
+ReactDOM.render(<App />, document.querySelector('.container'));
